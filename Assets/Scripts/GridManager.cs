@@ -34,35 +34,34 @@ public class GridManager : MonoBehaviour
 		}
 	}
 
-	public Vector2 GetPosition(int _index)
-	{
-		return _GridList[_index].Position;
-	}
-
 	public Vector2 GetLeftPosition(Vector2 _position)
 	{
-		var grid = _GridList.Where(x => x.Position.x < _position.x && _position.y == x.Position.y && Vector2.Distance(x.Position, _position) == m_CellSize).FirstOrDefault();
+		var grid = _GridList.Where(x => x.Position.x < _position.x && _position.y == x.Position.y && Vector2.Distance(x.Position, _position) <= m_CellSize).FirstOrDefault();
 		if (grid == null) return _position;
 		return grid.Position;
 	}
 
 	public Vector2 GetRightPosition(Vector2 _position)
 	{
-		var grid = _GridList.Where(x => x.Position.x > _position.x && _position.y == x.Position.y && Vector2.Distance(x.Position, _position) == m_CellSize).FirstOrDefault();
+		var grid = _GridList.Where(x => x.Position.x > _position.x && _position.y == x.Position.y && Vector2.Distance(x.Position, _position) >= m_CellSize).FirstOrDefault();
 		if (grid == null) return _position;
 		return grid.Position;
 	}
 	public Vector2 GetUpPosition(Vector2 _position)
 	{
-		var grid = _GridList.Where(x => x.Position.y > _position.y && _position.x == x.Position.x && Vector2.Distance(x.Position, _position) == m_CellSize).FirstOrDefault();
+		var grid = _GridList.Where(x => x.Position.y > _position.y && _position.x == x.Position.x && Vector2.Distance(x.Position, _position) >= m_CellSize).FirstOrDefault();
 		if (grid == null) return _position;
 		return grid.Position;
 	}
 
 	public Vector2 GetDownPosition(Vector2 _position)
 	{
-		var grid = _GridList.Where(x => x.Position.y < _position.y && _position.x == x.Position.x && Vector2.Distance(x.Position, _position) == m_CellSize).FirstOrDefault();
+		var grid = _GridList.Where(x => x.Position.y < _position.y && _position.x == x.Position.x && Vector2.Distance(x.Position, _position) <= m_CellSize).FirstOrDefault();
 		if (grid == null) return _position;
 		return grid.Position;
 	}
+
+	public Grid GetGrid(Vector2 _position) => _GridList.Where(x => x.Position == _position).FirstOrDefault();
+
+	public Vector2 GetNearestGridPosition(Vector2 _position) => _GridList.Where(x => Vector2.Distance(x.Position, _position) <= 0.3f).FirstOrDefault().Position;
 }

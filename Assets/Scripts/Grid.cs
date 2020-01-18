@@ -9,4 +9,6 @@ public class Grid
 	{
 		_Position = _position;
 	}
+
+	public override string ToString() => $"Grid : {Position}";
 }
