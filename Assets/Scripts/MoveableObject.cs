@@ -7,13 +7,9 @@ public class MoveableObject : UnitObject
 	[Range(0, 100)]
 	[SerializeField] protected int m_Speed;
 
-	private float _WidhtOrtho;
 	protected override void Start()
 	{
 		base.Start();
-
-		_WidhtOrtho = Camera.main.orthographicSize * ((float)Screen.width / (float)Screen.height);
-
 	}
 
 	private Vector2 _Direction = Vector2.zero;
@@ -41,15 +37,25 @@ public class MoveableObject : UnitObject
 		if (!CheckMove()) return;
 
 		if (_Direction.x == -1)
-			transform.position = GridManager.Instance.GetLeftPosition(transform.position);
+			transform.position = LimitMovePosition(GridManager.Instance.GetLeftPosition(transform.position));
 		else if (_Direction.x == 1)
-			transform.position = GridManager.Instance.GetRightPosition(transform.position);
+			transform.position = LimitMovePosition(GridManager.Instance.GetRightPosition(transform.position));
 		if (_Direction.y == 1)
-			transform.position = GridManager.Instance.GetUpPosition(transform.position);
+			transform.position = LimitMovePosition(GridManager.Instance.GetUpPosition(transform.position));
 		else if (_Direction.y == -1)
-			transform.position = GridManager.Instance.GetDownPosition(transform.position);
+			transform.position = LimitMovePosition(GridManager.Instance.GetDownPosition(transform.position));
 
 		_Direction = Vector2.zero;
+	}
+
+	protected virtual Vector2 LimitMovePosition(Vector2 _position)
+	{
+		if (_position.x > GridManager.ScreenBounds.x - Width || _position.x < -(GridManager.ScreenBounds.x + Width)
+			|| _position.y > GridManager.ScreenBounds.y - Height || _position.y < -(GridManager.ScreenBounds.y + Height))
+			return transform.position;
+
+		return new Vector2(Mathf.Clamp(_position.x, -(GridManager.ScreenBounds.x + Width), GridManager.ScreenBounds.x - Width),
+							Mathf.Clamp(_position.y, -(GridManager.ScreenBounds.y + Height), GridManager.ScreenBounds.y - Height));
 	}
 
 	protected virtual void GoLeft() => _Direction = new Vector2(-1, _Direction.y);
@@ -59,5 +65,4 @@ public class MoveableObject : UnitObject
 	protected virtual void GoUp() => _Direction = new Vector2(_Direction.x, 1);
 
 	protected virtual void GoDown() => _Direction = new Vector2(_Direction.x, -1);
-
 }
