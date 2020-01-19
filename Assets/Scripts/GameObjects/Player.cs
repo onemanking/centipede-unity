@@ -55,7 +55,11 @@ public class Player : MoveableObject
 	{
 		var limitScreenHeight = GameManager.ScreenBounds.y * _LimitPercentage;
 
-		if (InvalidNextPosition(_position, limitScreenHeight)) return transform.position;
+		if (InvalidNextPosition(_position, limitScreenHeight))
+		{
+			CheckCollisionCondition(_position);
+			return transform.position;
+		}
 
 		return new Vector2(Mathf.Clamp(_position.x, -(GameManager.ScreenBounds.x + Width), GameManager.ScreenBounds.x - Width),
 							Mathf.Clamp(_position.y, -(GameManager.ScreenBounds.y + Height), limitScreenHeight));

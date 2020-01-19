@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System;
 public class MoveableObject : UnitObject
 {
 	[Range(0, 100)]
@@ -54,7 +54,11 @@ public class MoveableObject : UnitObject
 
 	protected virtual Vector2 LimitMovePosition(Vector2 _position)
 	{
-		if (InvalidNextPosition(_position, GameManager.ScreenBounds.y)) return transform.position;
+		if (InvalidNextPosition(_position, GameManager.ScreenBounds.y))
+		{
+			CheckCollisionCondition(_position);
+			return transform.position;
+		}
 
 		return new Vector2(Mathf.Clamp(_position.x, -(GameManager.ScreenBounds.x + Width), GameManager.ScreenBounds.x - Width),
 							Mathf.Clamp(_position.y, -(GameManager.ScreenBounds.y + Height), GameManager.ScreenBounds.y - Height));
@@ -65,6 +69,20 @@ public class MoveableObject : UnitObject
 		return _nextPosition.x > GameManager.ScreenBounds.x - Width || _nextPosition.x < -(GameManager.ScreenBounds.x + Width)
 				|| _nextPosition.y > _limitScreenHeight || _nextPosition.y < -(GameManager.ScreenBounds.y + Height)
 				|| _nextPosition.HasObject();
+	}
+
+	protected virtual void CheckCollisionCondition(Vector2 _nextPosition)
+	{
+		if (_nextPosition.CurrentUnitObject())
+		{
+			OnCollisionCondition(_nextPosition.CurrentUnitObject());
+		}
+	}
+
+	protected virtual void OnCollisionCondition(UnitObject _anotherObject)
+	{
+		// DO COLLISION CONDITION
+		Debug.Log(_anotherObject.gameObject.tag);
 	}
 
 	protected virtual void GoLeft() => _Direction = new Vector2(-1, _Direction.y);
