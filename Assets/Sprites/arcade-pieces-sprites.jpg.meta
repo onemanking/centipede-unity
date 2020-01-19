@@ -8,6 +8,21 @@ TextureImporter:
   - first:
       213: 2826122514585772690
     second: bullet
+  - first:
+      213: 4168050227976698687
+    second: mushroom
+  - first:
+      213: 1407073610674970938
+    second: centipede.head
+  - first:
+      213: 6927457844575288967
+    second: centipede.body
+  - first:
+      213: -8547727699449793440
+    second: centipede.tail
+  - first:
+      213: -8731851185458395098
+    second: spider
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -129,6 +144,111 @@ TextureImporter:
       bones: []
       spriteID: 2926e9d1477683720800000000000000
       internalID: 2826122514585772690
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mushroom
+      rect:
+        serializedVersion: 2
+        x: 76
+        y: 472
+        width: 64
+        height: 59
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f3b798c5993e7d930800000000000000
+      internalID: 4168050227976698687
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: centipede.head
+      rect:
+        serializedVersion: 2
+        x: 388
+        y: 642
+        width: 56
+        height: 56
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a31ab117efde68310800000000000000
+      internalID: 1407073610674970938
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: centipede.body
+      rect:
+        serializedVersion: 2
+        x: 452
+        y: 642
+        width: 56
+        height: 56
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 78e3766d436432060800000000000000
+      internalID: 6927457844575288967
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: centipede.tail
+      rect:
+        serializedVersion: 2
+        x: 580
+        y: 642
+        width: 56
+        height: 56
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0643785f1fe506980800000000000000
+      internalID: -8547727699449793440
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spider
+      rect:
+        serializedVersion: 2
+        x: 548
+        y: 215
+        width: 120
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 628cd233c9b32d680800000000000000
+      internalID: -8731851185458395098
       vertices: []
       indices: 
       edges: []

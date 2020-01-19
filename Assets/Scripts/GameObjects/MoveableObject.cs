@@ -48,14 +48,33 @@ public class MoveableObject : UnitObject
 		_Direction = Vector2.zero;
 	}
 
+	// bool CheckMovable()
+	// {
+	// 	RaycastHit2D hit = Physics2D.Raycast(transform.position, _Direction, 1);
+	// 	if (hit)
+	// 	{
+	// 		if (hit.collider.gameObject.CompareTag("Mushroom"))
+	// 		{
+
+	// 			return false;
+	// 		}
+	// 	}
+
+	// 	return true;
+	// }
+
 	protected virtual Vector2 LimitMovePosition(Vector2 _position)
 	{
-		if (_position.x > GridManager.ScreenBounds.x - Width || _position.x < -(GridManager.ScreenBounds.x + Width)
-			|| _position.y > GridManager.ScreenBounds.y - Height || _position.y < -(GridManager.ScreenBounds.y + Height))
-			return transform.position;
+		if (CheckNextPosition(_position, GameManager.ScreenBounds.y)) return transform.position;
 
-		return new Vector2(Mathf.Clamp(_position.x, -(GridManager.ScreenBounds.x + Width), GridManager.ScreenBounds.x - Width),
-							Mathf.Clamp(_position.y, -(GridManager.ScreenBounds.y + Height), GridManager.ScreenBounds.y - Height));
+		return new Vector2(Mathf.Clamp(_position.x, -(GameManager.ScreenBounds.x + Width), GameManager.ScreenBounds.x - Width),
+							Mathf.Clamp(_position.y, -(GameManager.ScreenBounds.y + Height), GameManager.ScreenBounds.y - Height));
+	}
+
+	protected virtual bool CheckNextPosition(Vector2 _nextPosition, float _limitScreenHeight)
+	{
+		return _nextPosition.x > GameManager.ScreenBounds.x - Width || _nextPosition.x < -(GameManager.ScreenBounds.x + Width)
+				   || _nextPosition.y > _limitScreenHeight || _nextPosition.y < -(GameManager.ScreenBounds.y + Height);
 	}
 
 	protected virtual void GoLeft() => _Direction = new Vector2(-1, _Direction.y);

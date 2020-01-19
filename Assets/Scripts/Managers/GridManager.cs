@@ -4,24 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class GridManager : MonoBehaviour
+public class GridManager : Singleton<GridManager>
 {
-	public static GridManager Instance => _Instance;
-	private static GridManager _Instance;
-
-
 	[SerializeField] private int m_Size;
 	[SerializeField] private float m_CellSize;
 
-	public static Vector2 ScreenBounds => _ScreenBounds;
-	private static Vector3 _ScreenBounds;
+	public int GridLength => _GridList.Count;
 
 	private List<Grid> _GridList = new List<Grid>();
-	private void Awake()
-	{
-		_Instance = GetComponent<GridManager>();
-		_ScreenBounds = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
-	}
 
 	private void Start()
 	{
@@ -34,7 +24,6 @@ public class GridManager : MonoBehaviour
 				_GridList.Add(grid);
 			}
 		}
-
 	}
 
 	public Vector2 GetLeftPosition(Vector2 _position)
