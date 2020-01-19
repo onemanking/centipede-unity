@@ -54,13 +54,13 @@ public class MoveableObject : UnitObject
 
 	protected virtual Vector2 LimitMovePosition(Vector2 _position)
 	{
-		if (CheckNextPosition(_position, GameManager.ScreenBounds.y)) return transform.position;
+		if (InvalidNextPosition(_position, GameManager.ScreenBounds.y)) return transform.position;
 
 		return new Vector2(Mathf.Clamp(_position.x, -(GameManager.ScreenBounds.x + Width), GameManager.ScreenBounds.x - Width),
 							Mathf.Clamp(_position.y, -(GameManager.ScreenBounds.y + Height), GameManager.ScreenBounds.y - Height));
 	}
 
-	protected virtual bool CheckNextPosition(Vector2 _nextPosition, float _limitScreenHeight)
+	protected virtual bool InvalidNextPosition(Vector2 _nextPosition, float _limitScreenHeight)
 	{
 		return _nextPosition.x > GameManager.ScreenBounds.x - Width || _nextPosition.x < -(GameManager.ScreenBounds.x + Width)
 				|| _nextPosition.y > _limitScreenHeight || _nextPosition.y < -(GameManager.ScreenBounds.y + Height)
