@@ -8,9 +8,4 @@ public class Bullet : MoveableObject
 
 		GoUp();
 	}
-
-	protected override void OnTriggerEnter2D(Collider2D _other)
-	{
-		if (_other.gameObject.tag != "Player") Destroy(gameObject);
-	}
 }

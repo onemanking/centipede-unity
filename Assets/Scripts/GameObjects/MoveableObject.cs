@@ -36,6 +36,8 @@ public class MoveableObject : UnitObject
 	{
 		if (!CheckMove()) return;
 
+		CurrentGrid.SetCurrentUnitObject(null);
+
 		if (_Direction.x == -1)
 			transform.position = LimitMovePosition(GridManager.Instance.GetLeftPosition(transform.position));
 		else if (_Direction.x == 1)
@@ -45,23 +47,10 @@ public class MoveableObject : UnitObject
 		else if (_Direction.y == -1)
 			transform.position = LimitMovePosition(GridManager.Instance.GetDownPosition(transform.position));
 
+		CurrentGrid.SetCurrentUnitObject(this);
+
 		_Direction = Vector2.zero;
 	}
-
-	// bool CheckMovable()
-	// {
-	// 	RaycastHit2D hit = Physics2D.Raycast(transform.position, _Direction, 1);
-	// 	if (hit)
-	// 	{
-	// 		if (hit.collider.gameObject.CompareTag("Mushroom"))
-	// 		{
-
-	// 			return false;
-	// 		}
-	// 	}
-
-	// 	return true;
-	// }
 
 	protected virtual Vector2 LimitMovePosition(Vector2 _position)
 	{
@@ -74,7 +63,8 @@ public class MoveableObject : UnitObject
 	protected virtual bool CheckNextPosition(Vector2 _nextPosition, float _limitScreenHeight)
 	{
 		return _nextPosition.x > GameManager.ScreenBounds.x - Width || _nextPosition.x < -(GameManager.ScreenBounds.x + Width)
-				   || _nextPosition.y > _limitScreenHeight || _nextPosition.y < -(GameManager.ScreenBounds.y + Height);
+				|| _nextPosition.y > _limitScreenHeight || _nextPosition.y < -(GameManager.ScreenBounds.y + Height)
+				|| _nextPosition.HasObject();
 	}
 
 	protected virtual void GoLeft() => _Direction = new Vector2(-1, _Direction.y);

@@ -13,6 +13,7 @@ public class UnitObject : MonoBehaviour
 
 	private float _Width;
 	private float _Height;
+	private bool _Inited;
 
 	protected virtual void Start()
 	{
@@ -23,15 +24,12 @@ public class UnitObject : MonoBehaviour
 
 	protected virtual void Update()
 	{
-
+		if (!_Inited)
+		{
+			_Inited = true;
+			CurrentGrid.SetCurrentUnitObject(this);
+		}
 	}
 
-	protected virtual void OnCollisionEnter2D(Collision2D _col)
-	{
-	}
-
-	protected virtual void OnTriggerEnter2D(Collider2D _other)
-	{
-		if (m_Hp == 0) Destroy(gameObject);
-	}
+	protected virtual void OnDestroy() => CurrentGrid.SetCurrentUnitObject(null);
 }
