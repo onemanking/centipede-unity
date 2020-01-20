@@ -24,9 +24,12 @@ namespace CentipedeGame.GameObjects
 								Mathf.Clamp(_position.y, -(GameManager.ScreenBounds.y + Height), GameManager.ScreenBounds.y - Height));
 		}
 
-		protected override void OnCollisionCondition(UnitObject _anotherObject)
+		public override void OnCollisionCondition(UnitObject _anotherObject)
 		{
 			base.OnCollisionCondition(_anotherObject);
+
+			if (_anotherObject.tag != tag)
+				_anotherObject.OnCollisionCondition(this);
 
 			Destroy(gameObject);
 		}

@@ -11,6 +11,8 @@ namespace CentipedeGame.Entities
 		private UnitObject _CurrentUnitObject;
 		public UnitObject CurrentUnitObject => _CurrentUnitObject;
 
+		public bool HasObject => _CurrentUnitObject != null;
+
 		public Grid(Vector2 _position)
 		{
 			_Position = _position;

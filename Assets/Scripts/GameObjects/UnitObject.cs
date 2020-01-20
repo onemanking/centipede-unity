@@ -21,9 +21,18 @@ namespace CentipedeGame.GameObjects
 
 		protected virtual void Start()
 		{
+			_Inited = CurrentGrid.HasObject;
+
+			if (!_Inited)
+			{
+				_Inited = true;
+				CurrentGrid.SetCurrentUnitObject(this);
+			}
+
 			var bounds = GetComponent<SpriteRenderer>().bounds;
 			_Width = bounds.extents.x;
 			_Height = bounds.extents.y;
+
 		}
 
 		protected virtual void Update()
@@ -33,6 +42,11 @@ namespace CentipedeGame.GameObjects
 				_Inited = true;
 				CurrentGrid.SetCurrentUnitObject(this);
 			}
+		}
+
+		public virtual void OnCollisionCondition(UnitObject _anotherObject = null)
+		{
+			Debug.Log(_anotherObject.gameObject.tag);
 		}
 
 		protected virtual void OnDestroy() => CurrentGrid.SetCurrentUnitObject(null);

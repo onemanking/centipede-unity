@@ -77,16 +77,10 @@ namespace CentipedeGame.GameObjects
 
 		protected virtual void CheckCollisionCondition(Vector2 _nextPosition)
 		{
-			if (_nextPosition.CurrentUnitObject())
+			if (_nextPosition.GetCurrentUnitObject())
 			{
-				OnCollisionCondition(_nextPosition.CurrentUnitObject());
+				OnCollisionCondition(_nextPosition.GetCurrentUnitObject());
 			}
-		}
-
-		protected virtual void OnCollisionCondition(UnitObject _anotherObject)
-		{
-			// DO COLLISION CONDITION
-			Debug.Log(_anotherObject.gameObject.tag);
 		}
 
 		protected virtual void GoLeft() => _Direction = new Vector2(-1, _Direction.y);

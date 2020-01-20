@@ -12,7 +12,7 @@ namespace CentipedeGame.Managers
 		[SerializeField] private int m_Size;
 		[SerializeField] private float m_CellSize;
 
-		public int GridLength => _GridList.Count;
+		public float CellSize => m_CellSize;
 
 		private List<Grid> _GridList = new List<Grid>();
 
@@ -57,5 +57,13 @@ namespace CentipedeGame.Managers
 		}
 
 		public Grid GetGrid(Vector2 _position) => _GridList.Where(x => x.Position == _position).FirstOrDefault();
+
+		public Vector2 RandomGridPosition() => _GridList.Where(_ => _.Position.y >= 2 && _.CurrentUnitObject == null).Select(x => x).OrderBy(grid => Guid.NewGuid()).FirstOrDefault().Position;
+
+		public Vector2 GetTopLeftGridPosition()
+		{
+			var pos = Vector2.zero;
+			return _GridList.Where(g => g.Position.x <= pos.x && g.Position.y >= pos.y).Select(gird => pos = gird.Position).LastOrDefault();
+		}
 	}
 }

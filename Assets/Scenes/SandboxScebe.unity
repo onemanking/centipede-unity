@@ -429,8 +429,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_CentipedePrefab: {fileID: 0}
+  m_MushroomPrefab: {fileID: 4702387617612257320, guid: c3e48587b7590fd45a8fa32da775afe3,
+    type: 3}
   m_PlayerLive: 3
   m_CentipedeLength: 15
+  m_MushroomMax: 35
   m_ScoreText: {fileID: 1755077958}
 --- !u!1 &2034044854
 GameObject:
@@ -538,6 +541,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3535334814567468960, guid: 95a61c194e6465147923b2bfcc63109d,
+        type: 3}
+      propertyPath: m_Speed
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 3535334814567468961, guid: 95a61c194e6465147923b2bfcc63109d,
         type: 3}
       propertyPath: m_Name
