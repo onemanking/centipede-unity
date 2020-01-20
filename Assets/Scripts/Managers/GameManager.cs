@@ -1,4 +1,5 @@
-﻿using CentipedeGame.GameObjects;
+﻿using System;
+using CentipedeGame.GameObjects;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -28,6 +29,9 @@ namespace CentipedeGame.Managers
 		[SerializeField] private Text m_ScoreText;
 
 		public int Score => _Score;
+
+		public int CentipedeLength => m_CentipedeLength;
+
 		private int _Score;
 
 		protected override void Awake()
@@ -40,15 +44,12 @@ namespace CentipedeGame.Managers
 
 		void Start()
 		{
-			UpdateScore(_Score);
+			UpdateScore(0);
 			CreateCentipede();
 			CreateMushroom();
 		}
 
-		void Update()
-		{
-
-		}
+		public void UpdateScore() => UpdateScore(m_CentipedeScore);
 
 		public void UpdateScore(int _score)
 		{
@@ -56,15 +57,16 @@ namespace CentipedeGame.Managers
 			m_ScoreText.text = $"Score: {_Score}";
 		}
 
-
+		// private List<Centipede> _CentipedeList = new List<Centipede>();
 		private void CreateCentipede()
 		{
 			var pos = Vector2.zero;
-			for (int i = 0; i < m_CentipedeLength; i++)
+			for (int i = 0; i < CentipedeLength; i++)
 			{
 				pos = new Vector2(i, GridManager.Instance.GetTopLeftGridPosition().y);
 				var centipede = SpawnUnitObjectToGrid(m_CentipedePrefab, pos) as Centipede;
 				centipede.SetOrder(i);
+				// _CentipedeList.Add(centipede);
 			}
 		}
 
@@ -77,11 +79,22 @@ namespace CentipedeGame.Managers
 			}
 		}
 
-		private UnitObject SpawnUnitObjectToGrid(UnitObject _prefab, Vector2 _position)
+		public UnitObject SpawnUnitObjectToGrid(UnitObject _prefab, Vector2 _position)
 		{
 			var unitObject = Instantiate(_prefab, _position, Quaternion.identity);
 			_position.ToGrid().SetCurrentUnitObject(unitObject);
 			return unitObject;
 		}
+
+		// public void UpdateCentipede(int _order)
+		// {
+		// 	for (int i = 0; i < _CentipedeList.Count; i++)
+		// 	{
+		// 		if (i < _order)
+		// 		{
+		// 			_CentipedeList[i].ToggleDirection();
+		// 		}
+		// 	}
+		// }
 	}
 }
