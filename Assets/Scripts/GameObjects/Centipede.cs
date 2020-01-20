@@ -1,16 +1,19 @@
 ﻿using UnityEngine;
 
-public class Centipede : MoveableObject
+namespace CentipedeGame.GameObjects
 {
-	protected override void Start()
+	public class Centipede : MoveableObject
 	{
-		base.Start();
+		protected override void Start()
+		{
+			base.Start();
 
-		GoRight();
-	}
+			GoRight();
+		}
 
-	protected override void Update()
-	{
-		base.Update();
+		protected override void Update()
+		{
+			base.Update();
+		}
 	}
 }

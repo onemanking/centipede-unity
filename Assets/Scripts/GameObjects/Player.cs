@@ -1,67 +1,71 @@
-﻿using UnityEngine;
+﻿using CentipedeGame.Managers;
+using UnityEngine;
 
-public class Player : MoveableObject
+namespace CentipedeGame.GameObjects
 {
-	private const float _LimitPercentage = 0.15f;
-
-	[SerializeField] private Bullet m_Bullet;
-	[Range(1, 100)]
-	[SerializeField] private float m_FireRate = 1.0f;
-
-	private float _NextFire;
-
-	protected override void Start()
+	public class Player : MoveableObject
 	{
-		base.Start();
+		private const float _LimitPercentage = 0.15f;
 
-		m_FireRate = m_FireRate <= 0 ? 1 : m_FireRate;
-	}
+		[SerializeField] private Bullet m_Bullet;
+		[Range(1, 100)]
+		[SerializeField] private float m_FireRate = 1.0f;
 
-	protected override void Update()
-	{
-		base.Update();
+		private float _NextFire;
 
-		if (Input.GetKey(KeyCode.LeftArrow))
+		protected override void Start()
 		{
-			GoLeft();
-		}
-		else if (Input.GetKey(KeyCode.RightArrow))
-		{
-			GoRight();
+			base.Start();
+
+			m_FireRate = m_FireRate <= 0 ? 1 : m_FireRate;
 		}
 
-		if (Input.GetKey(KeyCode.UpArrow))
+		protected override void Update()
 		{
-			GoUp();
-		}
-		else if (Input.GetKey(KeyCode.DownArrow))
-		{
-			GoDown();
-		}
+			base.Update();
 
-		if (Input.GetKeyDown(KeyCode.Space) && Time.time > _NextFire)
-		{
-			_NextFire = Time.time + 1f / m_FireRate;
-			Shoot();
-		}
-	}
+			if (Input.GetKey(KeyCode.LeftArrow))
+			{
+				GoLeft();
+			}
+			else if (Input.GetKey(KeyCode.RightArrow))
+			{
+				GoRight();
+			}
 
-	private void Shoot()
-	{
-		Instantiate(m_Bullet, transform.position, transform.rotation);
-	}
+			if (Input.GetKey(KeyCode.UpArrow))
+			{
+				GoUp();
+			}
+			else if (Input.GetKey(KeyCode.DownArrow))
+			{
+				GoDown();
+			}
 
-	protected override Vector2 LimitMovePosition(Vector2 _position)
-	{
-		var limitScreenHeight = GameManager.ScreenBounds.y * _LimitPercentage;
-
-		if (InvalidNextPosition(_position, limitScreenHeight))
-		{
-			CheckCollisionCondition(_position);
-			return transform.position;
+			if (Input.GetKeyDown(KeyCode.Space) && Time.time > _NextFire)
+			{
+				_NextFire = Time.time + 1f / m_FireRate;
+				Shoot();
+			}
 		}
 
-		return new Vector2(Mathf.Clamp(_position.x, -(GameManager.ScreenBounds.x + Width), GameManager.ScreenBounds.x - Width),
-							Mathf.Clamp(_position.y, -(GameManager.ScreenBounds.y + Height), limitScreenHeight));
+		private void Shoot()
+		{
+			Instantiate(m_Bullet, transform.position, transform.rotation);
+		}
+
+		protected override Vector2 LimitMovePosition(Vector2 _position)
+		{
+			var limitScreenHeight = GameManager.ScreenBounds.y * _LimitPercentage;
+
+			if (InvalidNextPosition(_position, limitScreenHeight))
+			{
+				CheckCollisionCondition(_position);
+				return transform.position;
+			}
+
+			return new Vector2(Mathf.Clamp(_position.x, -(GameManager.ScreenBounds.x + Width), GameManager.ScreenBounds.x - Width),
+								Mathf.Clamp(_position.y, -(GameManager.ScreenBounds.y + Height), limitScreenHeight));
+		}
 	}
 }

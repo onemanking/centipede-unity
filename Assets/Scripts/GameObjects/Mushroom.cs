@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 
-public class Mushroom : UnitObject
+namespace CentipedeGame.GameObjects
 {
+	public class Mushroom : UnitObject
+	{
 
+	}
 }

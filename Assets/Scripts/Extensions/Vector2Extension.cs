@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using CentipedeGame.GameObjects;
+using CentipedeGame.Managers;
+using UnityEngine;
+using Grid = CentipedeGame.Entities.Grid;
 
 public static class Vector2Extension
 {
