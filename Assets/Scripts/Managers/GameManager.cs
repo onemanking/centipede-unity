@@ -6,8 +6,13 @@ namespace CentipedeGame.Managers
 {
 	public class GameManager : Singleton<GameManager>
 	{
+		private const float _LIMIT_PERCENTAGE = 0.15f;
+
 		public static Vector2 ScreenBounds => _ScreenBounds;
 		private static Vector3 _ScreenBounds;
+
+		public static float LimitScreenHeight => _LimitScreenHeight;
+		private static float _LimitScreenHeight;
 
 		[Header("GAME PREFABS")]
 		[SerializeField] private Centipede m_CentipedePrefab;
@@ -30,6 +35,7 @@ namespace CentipedeGame.Managers
 			base.Awake();
 
 			_ScreenBounds = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
+			_LimitScreenHeight = GameManager.ScreenBounds.y * _LIMIT_PERCENTAGE;
 		}
 
 		void Start()

@@ -14,14 +14,20 @@ namespace CentipedeGame.GameObjects
 
 		protected override Vector2 LimitMovePosition(Vector2 _position)
 		{
-			if (InvalidNextPosition(_position, GameManager.ScreenBounds.y))
+			if (InvalidNextPosition(_position))
 			{
-				CheckCollisionCondition(_position);
+				Destroy(gameObject);
 				return transform.position;
 			}
 
-			return new Vector2(Mathf.Clamp(_position.x, -(GameManager.ScreenBounds.x + Width), GameManager.ScreenBounds.x - Width),
-								Mathf.Clamp(_position.y, -(GameManager.ScreenBounds.y + Height), GameManager.ScreenBounds.y - Height));
+			return _position;
+		}
+
+		protected override bool InvalidNextPosition(Vector2 _nextPosition)
+		{
+			CheckCollisionCondition(_nextPosition);
+
+			return _nextPosition.HasObject() || (GameManager.ScreenBounds.y - transform.position.y) <= GridManager.Instance.CellSize;
 		}
 
 		public override void OnCollisionCondition(UnitObject _anotherObject)

@@ -5,8 +5,6 @@ namespace CentipedeGame.GameObjects
 {
 	public class Player : MoveableObject
 	{
-		private const float _LimitPercentage = 0.15f;
-
 		[SerializeField] private Bullet m_Bullet;
 		[Range(1, 100)]
 		[SerializeField] private float m_FireRate = 1.0f;
@@ -56,16 +54,20 @@ namespace CentipedeGame.GameObjects
 
 		protected override Vector2 LimitMovePosition(Vector2 _position)
 		{
-			var limitScreenHeight = GameManager.ScreenBounds.y * _LimitPercentage;
-
-			if (InvalidNextPosition(_position, limitScreenHeight))
-			{
-				CheckCollisionCondition(_position);
+			if (InvalidNextPosition(_position))
 				return transform.position;
-			}
 
 			return new Vector2(Mathf.Clamp(_position.x, -(GameManager.ScreenBounds.x + Width), GameManager.ScreenBounds.x - Width),
-								Mathf.Clamp(_position.y, -(GameManager.ScreenBounds.y + Height), limitScreenHeight));
+								Mathf.Clamp(_position.y, -(GameManager.ScreenBounds.y + Height), GameManager.LimitScreenHeight));
+		}
+
+		protected override bool InvalidNextPosition(Vector2 _nextPosition)
+		{
+			CheckCollisionCondition(_nextPosition);
+
+			return _nextPosition.x > GameManager.ScreenBounds.x - Width || _nextPosition.x < -(GameManager.ScreenBounds.x + Width)
+					|| _nextPosition.y > GameManager.LimitScreenHeight || _nextPosition.y < -(GameManager.ScreenBounds.y + Height)
+					|| _nextPosition.HasObject();
 		}
 	}
 }
