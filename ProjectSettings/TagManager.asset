@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Bullet
   - Mushroom
+  - Centipede
   layers:
   - Default
   - TransparentFX

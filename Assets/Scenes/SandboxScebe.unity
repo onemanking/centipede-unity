@@ -428,12 +428,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea6a25e1762e85746b3948bf296c53a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_CentipedePrefab: {fileID: 0}
+  m_CentipedePrefab: {fileID: 8716491496701557455, guid: f328aac1b04dd98488a5c2ed6b648a12,
+    type: 3}
   m_MushroomPrefab: {fileID: 4702387617612257320, guid: c3e48587b7590fd45a8fa32da775afe3,
     type: 3}
   m_PlayerLive: 3
   m_CentipedeLength: 15
   m_MushroomMax: 35
+  m_CentipedeScore: 100
   m_ScoreText: {fileID: 1755077958}
 --- !u!1 &2034044854
 GameObject:
