@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using CentipedeGame.GameObjects;
 using UnityEngine;
 using UnityEngine.UI;
@@ -57,7 +58,7 @@ namespace CentipedeGame.Managers
 			m_ScoreText.text = $"Score: {_Score}";
 		}
 
-		// private List<Centipede> _CentipedeList = new List<Centipede>();
+		private List<Centipede> _CentipedeList = new List<Centipede>();
 		private void CreateCentipede()
 		{
 			var pos = Vector2.zero;
@@ -66,7 +67,7 @@ namespace CentipedeGame.Managers
 				pos = new Vector2(i, GridManager.Instance.GetTopLeftGridPosition().y);
 				var centipede = SpawnUnitObjectToGrid(m_CentipedePrefab, pos) as Centipede;
 				centipede.SetOrder(i);
-				// _CentipedeList.Add(centipede);
+				_CentipedeList.Add(centipede);
 			}
 		}
 
@@ -86,15 +87,15 @@ namespace CentipedeGame.Managers
 			return unitObject;
 		}
 
-		// public void UpdateCentipede(int _order)
-		// {
-		// 	for (int i = 0; i < _CentipedeList.Count; i++)
-		// 	{
-		// 		if (i < _order)
-		// 		{
-		// 			_CentipedeList[i].ToggleDirection();
-		// 		}
-		// 	}
-		// }
+		public void UpdateCentipede(int _order)
+		{
+			for (int i = 0; i < _CentipedeList.Count; i++)
+			{
+				if (i < _order)
+				{
+					_CentipedeList[i].ToggleDirection();
+				}
+			}
+		}
 	}
 }

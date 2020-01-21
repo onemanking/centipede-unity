@@ -63,8 +63,6 @@ namespace CentipedeGame.GameObjects
 
 		protected override bool InvalidNextPosition(Vector2 _nextPosition)
 		{
-			CheckCollisionCondition(_nextPosition);
-
 			return _nextPosition.x > GameManager.ScreenBounds.x - Width || _nextPosition.x < -(GameManager.ScreenBounds.x + Width)
 					|| _nextPosition.y > GameManager.LimitScreenHeight || _nextPosition.y < -(GameManager.ScreenBounds.y + Height)
 					|| _nextPosition.HasObject();

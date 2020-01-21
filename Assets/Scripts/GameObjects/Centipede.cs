@@ -1,18 +1,22 @@
-﻿using CentipedeGame.Managers;
+﻿using System;
+using CentipedeGame.Managers;
 using UnityEngine;
 
 namespace CentipedeGame.GameObjects
 {
 	public class Centipede : MoveableObject
 	{
-		[SerializeField] private Centipede m_CentipedeBodyPrefab;
-
 		private int _Order;
 		private bool _TurnLeft;
 		private bool _GoUp;
+		private float _LimitPositionX;
+		private SpriteRenderer _SpriteRenderer;
+
 		protected override void Start()
 		{
 			base.Start();
+			_LimitPositionX = GridManager.Instance.GetTopRightGridPosition().x;
+			_SpriteRenderer = GetComponent<SpriteRenderer>();
 		}
 
 		protected override void Update()
@@ -31,9 +35,8 @@ namespace CentipedeGame.GameObjects
 		{
 			if (InvalidNextPosition(_position))
 			{
+				ToggleUpDown();
 				ToggleDirection();
-				if (!_GoUp) GoDown();
-				else GoUp();
 
 				return transform.position;
 			}
@@ -41,29 +44,38 @@ namespace CentipedeGame.GameObjects
 			return _position;
 		}
 
+		private bool CheckReachedLimit(Vector2 _nextPosition)
+		{
+			return transform.position.x == _nextPosition.x && transform.position.y == _nextPosition.y;
+		}
+
 		protected override bool InvalidNextPosition(Vector2 _nextPosition)
 		{
-			CheckCollisionCondition(_nextPosition);
-
-			return _nextPosition.x > GameManager.ScreenBounds.x - Width || _nextPosition.x < -(GameManager.ScreenBounds.x + Width)
-					|| _nextPosition.y > GameManager.ScreenBounds.y - Height || _nextPosition.y < -(GameManager.ScreenBounds.y + Height)
-					|| _nextPosition.HasObject();
+			return CheckReachedLimit(_nextPosition) || _nextPosition.y > GameManager.ScreenBounds.y - Height
+					|| _nextPosition.y < -(GameManager.ScreenBounds.y + Height)
+					|| (_nextPosition.HasObject() && _nextPosition.GetCurrentUnitObject().tag != tag);
 		}
 
 		public override void OnCollisionCondition(UnitObject _anotherObject)
 		{
 			if (_anotherObject.tag == "Bullet")
 			{
-				// GameManager.Instance.UpdateCentipede(_Order);
+				GameManager.Instance.UpdateCentipede(_Order);
 				GameManager.Instance.UpdateScore();
 				Destroy(gameObject);
 			}
-			else if (_anotherObject.tag == "Mushroom")
-			{
-				ToggleDirection();
-			}
 		}
 
-		protected void ToggleDirection() => _TurnLeft = !_TurnLeft;
+		public void ToggleDirection()
+		{
+			_TurnLeft = !_TurnLeft;
+			_SpriteRenderer.flipX = _TurnLeft;
+		}
+
+		private void ToggleUpDown()
+		{
+			if (!_GoUp) GoDown();
+			else GoUp();
+		}
 	}
 }
