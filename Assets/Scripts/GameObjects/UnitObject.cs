@@ -48,10 +48,5 @@ namespace CentipedeGame.GameObjects
 		{
 			if (CurrentGrid.CurrentUnitObject == this) CurrentGrid.SetCurrentUnitObject(null);
 		}
-
-		protected virtual void OnTriggerEnter2D(Collider2D _other)
-		{
-			Debug.Log($"{_other.tag}");
-		}
 	}
 }

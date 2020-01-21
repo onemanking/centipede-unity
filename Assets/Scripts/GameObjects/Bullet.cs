@@ -28,9 +28,9 @@ namespace CentipedeGame.GameObjects
 			return (GameManager.ScreenBounds.y - transform.position.y) <= GridManager.Instance.CellSize;
 		}
 
-		protected override void OnTriggerEnter2D(Collider2D other)
+		private void OnTriggerEnter2D(Collider2D _other)
 		{
-			if (other.tag == GameManager.MUSHROOM || other.tag == GameManager.CENTIPEDE)
+			if (_other.tag == GameManager.MUSHROOM || _other.tag == GameManager.CENTIPEDE)
 				Destroy(gameObject);
 		}
 	}

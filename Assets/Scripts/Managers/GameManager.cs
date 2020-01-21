@@ -15,6 +15,8 @@ namespace CentipedeGame.Managers
 		public const string CENTIPEDE = "Centipede";
 
 		private const float _LIMIT_PERCENTAGE = 0.15f;
+		private const int _PAUSE_TIME_SCALE = 0;
+		private const int _NORMAL_TIME_SCALE = 1;
 
 		public static Vector2 ScreenBounds => _ScreenBounds;
 		private static Vector3 _ScreenBounds;
@@ -29,22 +31,29 @@ namespace CentipedeGame.Managers
 
 		[Header("GAME CONFIGURATION")]
 		[SerializeField] private int m_PlayerLife = 3;
+		[SerializeField] private int m_PlayerSpeed = 20;
+		[SerializeField] private int m_PlayerFireRate = 10;
 		[SerializeField] private int m_CentipedeLength = 15;
-		[SerializeField] private int m_MushroomMax = 35;
+		[SerializeField] private int m_CentipedeSpeed = 10;
 		[SerializeField] private int m_CentipedeScore = 100;
+		[SerializeField] private int m_MushroomMax = 35;
+		[SerializeField] private int m_MushroomHp = 3;
 
 		[Header("GAME UI")]
 		[SerializeField] private Text m_ScoreText;
 		[SerializeField] private Text m_PlayerLifeText;
 		[SerializeField] private Text m_GameOverText;
 
-		public int Score => _Score;
-
 		public int CentipedeLength => m_CentipedeLength;
-		public int PlayerLife => m_CurrentPlayerLife;
-		private int m_CurrentPlayerLife;
+		public int PlayerSpeed => m_PlayerSpeed;
+		public int PlayerFireRate => m_PlayerFireRate;
+		public int CentipedeSpeed => m_CentipedeSpeed;
+		public int MushroomHp => m_MushroomHp;
+
+		private int _CurrentPlayerLife;
 		private int _Score;
 		private bool _IsGameOver;
+		private List<Centipede> _CentipedeList;
 
 		protected override void Awake()
 		{
@@ -52,7 +61,7 @@ namespace CentipedeGame.Managers
 
 			_ScreenBounds = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
 			_LimitScreenHeight = GameManager.ScreenBounds.y * _LIMIT_PERCENTAGE;
-			m_CurrentPlayerLife = m_PlayerLife;
+			_CurrentPlayerLife = m_PlayerLife;
 		}
 
 		private void Start()
@@ -80,32 +89,39 @@ namespace CentipedeGame.Managers
 
 		private void DecreasePlayerLife()
 		{
-			--m_CurrentPlayerLife;
+			_CurrentPlayerLife--;
 			DisplayPlayLife();
 		}
 
 		private void DisplayPlayLife()
 		{
-			m_PlayerLifeText.text = $"Life: {m_CurrentPlayerLife}";
+			m_PlayerLifeText.text = $"Life: {_CurrentPlayerLife}";
 		}
 
 		public void CheckGameOver()
 		{
 			DecreasePlayerLife();
-			if (m_CurrentPlayerLife > 0)
+			if (_CurrentPlayerLife > 0)
 				RestartGame();
 			else
 				DisplayGameOver(true);
 		}
+		private void RestartGame()
+		{
+			foreach (var go in FindObjectsOfType<UnitObject>())
+			{
+				Destroy(go.gameObject);
+			}
+
+			Start();
+		}
 
 		private void DisplayGameOver(bool _isGameOver)
 		{
-			Time.timeScale = _isGameOver ? 0 : 1;
+			Time.timeScale = _isGameOver ? _PAUSE_TIME_SCALE : _NORMAL_TIME_SCALE;
 			_IsGameOver = _isGameOver;
 			m_GameOverText.gameObject.SetActive(_isGameOver);
 		}
-
-		private List<Centipede> _CentipedeList = new List<Centipede>();
 
 		private void CreatePlayer()
 		{
@@ -114,6 +130,7 @@ namespace CentipedeGame.Managers
 
 		private void CreateCentipede()
 		{
+			_CentipedeList = new List<Centipede>();
 			var pos = Vector2.zero;
 			for (int i = 0; i < CentipedeLength; i++)
 			{
@@ -122,15 +139,6 @@ namespace CentipedeGame.Managers
 				centipede.SetOrder(i);
 				_CentipedeList.Add(centipede);
 			}
-		}
-
-		private void RestartGame()
-		{
-			foreach (var go in FindObjectsOfType<UnitObject>())
-			{
-				Destroy(go.gameObject);
-			}
-			Start();
 		}
 
 		private void CreateMushroom()
@@ -149,9 +157,11 @@ namespace CentipedeGame.Managers
 			return unitObject;
 		}
 
-		public void UpdateCentipede(int _order)
+		public void UpdateCentipede(Centipede _centipede, int _order)
 		{
 			UpdateScore();
+			_CentipedeList.Remove(_centipede);
+
 			if (_CentipedeList.Count <= 0)
 			{
 				DisplayGameOver(true);

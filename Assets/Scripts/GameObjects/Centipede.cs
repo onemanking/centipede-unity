@@ -15,6 +15,8 @@ namespace CentipedeGame.GameObjects
 		protected override void Start()
 		{
 			base.Start();
+
+			m_Speed = GameManager.Instance.CentipedeSpeed;
 			_LimitPositionX = GridManager.Instance.GetTopRightGridPosition().x;
 			_SpriteRenderer = GetComponent<SpriteRenderer>();
 		}
@@ -55,7 +57,7 @@ namespace CentipedeGame.GameObjects
 		{
 			return CheckReachedLimit(_nextPosition) || _nextPosition.y > GameManager.ScreenBounds.y - Height
 					|| _nextPosition.y < -(GameManager.ScreenBounds.y + Height)
-					|| (_nextPosition.HasObject());
+					|| (_nextPosition.HasObject() && _nextPosition.GetCurrentUnitObject().tag != tag);
 		}
 
 		public void ToggleDirection()
@@ -70,11 +72,11 @@ namespace CentipedeGame.GameObjects
 			else GoUp();
 		}
 
-		protected override void OnTriggerEnter2D(Collider2D _other)
+		private void OnTriggerEnter2D(Collider2D _other)
 		{
 			if (_other.tag == GameManager.BULLET)
 			{
-				GameManager.Instance.UpdateCentipede(_Order);
+				GameManager.Instance.UpdateCentipede(this, _Order);
 				Destroy(gameObject);
 			}
 		}

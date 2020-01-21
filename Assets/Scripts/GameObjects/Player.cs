@@ -15,7 +15,8 @@ namespace CentipedeGame.GameObjects
 		{
 			base.Start();
 
-			m_FireRate = m_FireRate <= 0 ? 1 : m_FireRate;
+			m_Speed = GameManager.Instance.PlayerSpeed;
+			m_FireRate = GameManager.Instance.PlayerFireRate;
 		}
 
 		protected override void Update()
@@ -73,7 +74,7 @@ namespace CentipedeGame.GameObjects
 					|| _nextPosition.HasObject();
 		}
 
-		protected override void OnTriggerEnter2D(Collider2D _other)
+		private void OnTriggerEnter2D(Collider2D _other)
 		{
 			if (_other.tag == GameManager.CENTIPEDE)
 			{

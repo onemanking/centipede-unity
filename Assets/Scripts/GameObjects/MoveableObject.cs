@@ -9,14 +9,13 @@ namespace CentipedeGame.GameObjects
 	public class MoveableObject : UnitObject
 	{
 		[Range(0, 100)]
-		[SerializeField] protected int m_Speed;
-
-		protected override void Start()
-		{
-			base.Start();
-		}
+		[SerializeField] protected float m_Speed;
 
 		private Vector2 _Direction = Vector2.zero;
+		private float _NextMove;
+
+		protected override void Start() => base.Start();
+
 		protected override void Update()
 		{
 			base.Update();
@@ -24,7 +23,6 @@ namespace CentipedeGame.GameObjects
 			Move();
 		}
 
-		private float _NextMove;
 		private bool CheckMove()
 		{
 			if (Time.time > _NextMove)
@@ -40,7 +38,6 @@ namespace CentipedeGame.GameObjects
 		{
 			if (!CheckMove()) return;
 
-
 			if (_Direction.x == -1)
 				transform.position = LimitMovePosition(GridManager.Instance.GetLeftPosition(transform.position));
 			else if (_Direction.x == 1)
@@ -49,8 +46,6 @@ namespace CentipedeGame.GameObjects
 				transform.position = LimitMovePosition(GridManager.Instance.GetUpPosition(transform.position));
 			else if (_Direction.y == -1)
 				transform.position = LimitMovePosition(GridManager.Instance.GetDownPosition(transform.position));
-
-
 
 			_Direction = Vector2.zero;
 		}
