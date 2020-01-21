@@ -35,12 +35,14 @@ namespace CentipedeGame.GameObjects
 		{
 			if (InvalidNextPosition(_position))
 			{
+				CurrentGrid.SetCurrentUnitObject(this);
 				ToggleUpDown();
 				ToggleDirection();
 
 				return transform.position;
 			}
 
+			CurrentGrid.SetCurrentUnitObject(null);
 			return _position;
 		}
 
@@ -53,17 +55,7 @@ namespace CentipedeGame.GameObjects
 		{
 			return CheckReachedLimit(_nextPosition) || _nextPosition.y > GameManager.ScreenBounds.y - Height
 					|| _nextPosition.y < -(GameManager.ScreenBounds.y + Height)
-					|| (_nextPosition.HasObject() && _nextPosition.GetCurrentUnitObject().tag != tag);
-		}
-
-		public override void OnCollisionCondition(UnitObject _anotherObject)
-		{
-			if (_anotherObject.tag == "Bullet")
-			{
-				GameManager.Instance.UpdateCentipede(_Order);
-				GameManager.Instance.UpdateScore();
-				Destroy(gameObject);
-			}
+					|| (_nextPosition.HasObject());
 		}
 
 		public void ToggleDirection()
@@ -76,6 +68,15 @@ namespace CentipedeGame.GameObjects
 		{
 			if (!_GoUp) GoDown();
 			else GoUp();
+		}
+
+		protected override void OnTriggerEnter2D(Collider2D _other)
+		{
+			if (_other.tag == GameManager.BULLET)
+			{
+				GameManager.Instance.UpdateCentipede(_Order);
+				Destroy(gameObject);
+			}
 		}
 	}
 }

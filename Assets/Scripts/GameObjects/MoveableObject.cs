@@ -40,10 +40,6 @@ namespace CentipedeGame.GameObjects
 		{
 			if (!CheckMove()) return;
 
-			if (!CheckCollisionCondition())
-			{
-				CurrentGrid.SetCurrentUnitObject(null);
-			}
 
 			if (_Direction.x == -1)
 				transform.position = LimitMovePosition(GridManager.Instance.GetLeftPosition(transform.position));
@@ -54,22 +50,20 @@ namespace CentipedeGame.GameObjects
 			else if (_Direction.y == -1)
 				transform.position = LimitMovePosition(GridManager.Instance.GetDownPosition(transform.position));
 
-			if (CheckCollisionCondition())
-			{
-				OnCollisionCondition(CurrentGrid.CurrentUnitObject);
-			}
-			else
-			{
-				CurrentGrid.SetCurrentUnitObject(this);
 
-				_Direction = Vector2.zero;
-			}
+
+			_Direction = Vector2.zero;
 		}
 
 		protected virtual Vector2 LimitMovePosition(Vector2 _position)
 		{
 			if (InvalidNextPosition(_position))
+			{
+				CurrentGrid.SetCurrentUnitObject(this);
 				return transform.position;
+			}
+
+			CurrentGrid.SetCurrentUnitObject(null);
 
 			return new Vector2(Mathf.Clamp(_position.x, -(GameManager.ScreenBounds.x + Width), GameManager.ScreenBounds.x - Width),
 								Mathf.Clamp(_position.y, -(GameManager.ScreenBounds.y + Height), GameManager.ScreenBounds.y - Height));
@@ -80,11 +74,6 @@ namespace CentipedeGame.GameObjects
 			return _nextPosition.x > GameManager.ScreenBounds.x - Width || _nextPosition.x < -(GameManager.ScreenBounds.x + Width)
 					|| _nextPosition.y > GameManager.ScreenBounds.y - Height || _nextPosition.y < -(GameManager.ScreenBounds.y + Height);
 
-		}
-
-		protected virtual bool CheckCollisionCondition()
-		{
-			return CurrentGrid.CurrentUnitObject != null && CurrentGrid.CurrentUnitObject.tag != tag;
 		}
 
 		protected virtual void GoLeft() => _Direction = new Vector2(-1, _Direction.y);

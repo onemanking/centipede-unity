@@ -44,14 +44,14 @@ namespace CentipedeGame.GameObjects
 			}
 		}
 
-		public virtual void OnCollisionCondition(UnitObject _anotherObject = null)
-		{
-			Debug.Log(_anotherObject.gameObject.tag);
-		}
-
 		protected virtual void OnDestroy()
 		{
 			if (CurrentGrid.CurrentUnitObject == this) CurrentGrid.SetCurrentUnitObject(null);
+		}
+
+		protected virtual void OnTriggerEnter2D(Collider2D _other)
+		{
+			Debug.Log($"{_other.tag}");
 		}
 	}
 }

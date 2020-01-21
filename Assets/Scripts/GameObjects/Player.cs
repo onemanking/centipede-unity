@@ -55,7 +55,12 @@ namespace CentipedeGame.GameObjects
 		protected override Vector2 LimitMovePosition(Vector2 _position)
 		{
 			if (InvalidNextPosition(_position))
+			{
+				CurrentGrid.SetCurrentUnitObject(this);
 				return transform.position;
+			}
+
+			CurrentGrid.SetCurrentUnitObject(null);
 
 			return new Vector2(Mathf.Clamp(_position.x, -(GameManager.ScreenBounds.x + Width), GameManager.ScreenBounds.x - Width),
 								Mathf.Clamp(_position.y, -(GameManager.ScreenBounds.y + Height), GameManager.LimitScreenHeight));
@@ -66,6 +71,14 @@ namespace CentipedeGame.GameObjects
 			return _nextPosition.x > GameManager.ScreenBounds.x - Width || _nextPosition.x < -(GameManager.ScreenBounds.x + Width)
 					|| _nextPosition.y > GameManager.LimitScreenHeight || _nextPosition.y < -(GameManager.ScreenBounds.y + Height)
 					|| _nextPosition.HasObject();
+		}
+
+		protected override void OnTriggerEnter2D(Collider2D _other)
+		{
+			if (_other.tag == GameManager.CENTIPEDE)
+			{
+				GameManager.Instance.CheckGameOver();
+			}
 		}
 	}
 }
