@@ -65,5 +65,11 @@ namespace CentipedeGame.Managers
 			var pos = Vector2.zero;
 			return _GridList.Where(g => g.Position.x <= pos.x && g.Position.y >= pos.y).Select(gird => pos = gird.Position).LastOrDefault();
 		}
+
+		public Vector2 GetTopRightGridPosition()
+		{
+			var pos = Vector2.zero;
+			return _GridList.Where(g => g.Position.x >= pos.x && g.Position.y >= pos.y).Select(gird => pos = gird.Position).LastOrDefault();
+		}
 	}
 }

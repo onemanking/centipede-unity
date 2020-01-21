@@ -25,9 +25,12 @@ namespace CentipedeGame.GameObjects
 
 		protected override bool InvalidNextPosition(Vector2 _nextPosition)
 		{
-			CheckCollisionCondition(_nextPosition);
+			return (GameManager.ScreenBounds.y - transform.position.y) <= GridManager.Instance.CellSize;
+		}
 
-			return _nextPosition.HasObject() || (GameManager.ScreenBounds.y - transform.position.y) <= GridManager.Instance.CellSize;
+		protected override bool CheckCollisionCondition()
+		{
+			return CurrentGrid.CurrentUnitObject != null && CurrentGrid.CurrentUnitObject.tag != tag && CurrentGrid.CurrentUnitObject.tag != "Player";
 		}
 
 		public override void OnCollisionCondition(UnitObject _anotherObject)

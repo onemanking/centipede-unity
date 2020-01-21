@@ -49,6 +49,9 @@ namespace CentipedeGame.GameObjects
 			Debug.Log(_anotherObject.gameObject.tag);
 		}
 
-		protected virtual void OnDestroy() => CurrentGrid.SetCurrentUnitObject(null);
+		protected virtual void OnDestroy()
+		{
+			if (CurrentGrid.CurrentUnitObject == this) CurrentGrid.SetCurrentUnitObject(null);
+		}
 	}
 }
