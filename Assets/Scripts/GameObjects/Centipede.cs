@@ -38,7 +38,10 @@ namespace CentipedeGame.GameObjects
 			if (InvalidNextPosition(_position))
 			{
 				CurrentGrid.SetCurrentUnitObject(this);
-				ToggleUpDown();
+
+				if (_GoUp) GoUp();
+				else GoDown();
+
 				ToggleDirection();
 
 				return transform.position;
@@ -55,9 +58,11 @@ namespace CentipedeGame.GameObjects
 
 		protected override bool InvalidNextPosition(Vector2 _nextPosition)
 		{
-			return CheckReachedLimit(_nextPosition) || _nextPosition.y > GameManager.ScreenBounds.y - Height
-					|| _nextPosition.y < -(GameManager.ScreenBounds.y + Height)
-					|| (_nextPosition.HasObject() && _nextPosition.GetCurrentUnitObject().tag != tag);
+			if ((GameManager.ScreenBounds.y - transform.position.y >= GameManager.ScreenBounds.y && !_GoUp)
+				|| (GameManager.ScreenBounds.y - transform.position.y <= GridManager.Instance.CellSize && _GoUp))
+				ToggleUpDown();
+
+			return CheckReachedLimit(_nextPosition) || (_nextPosition.HasObject() && _nextPosition.GetCurrentUnitObject().tag != tag);
 		}
 
 		public void ToggleDirection()
@@ -66,11 +71,7 @@ namespace CentipedeGame.GameObjects
 			_SpriteRenderer.flipX = _TurnLeft;
 		}
 
-		private void ToggleUpDown()
-		{
-			if (!_GoUp) GoDown();
-			else GoUp();
-		}
+		private void ToggleUpDown() => _GoUp = !_GoUp;
 
 		private void OnTriggerEnter2D(Collider2D _other)
 		{

@@ -68,7 +68,6 @@ namespace CentipedeGame.GameObjects
 		{
 			return _nextPosition.x > GameManager.ScreenBounds.x - Width || _nextPosition.x < -(GameManager.ScreenBounds.x + Width)
 					|| _nextPosition.y > GameManager.ScreenBounds.y - Height || _nextPosition.y < -(GameManager.ScreenBounds.y + Height);
-
 		}
 
 		protected virtual void GoLeft() => _Direction = new Vector2(-1, _Direction.y);
