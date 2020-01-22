@@ -58,7 +58,9 @@ namespace CentipedeGame.Managers
 
 		public Grid GetGrid(Vector2 _position) => _GridList.Where(x => x.Position == _position).FirstOrDefault();
 
-		public Vector2 RandomGridPosition() => _GridList.Where(_ => _.Position.y >= 2 && _.CurrentUnitObject == null).Select(x => x).OrderBy(grid => Guid.NewGuid()).FirstOrDefault().Position;
+		public Vector2 RandomGridPosition() => _GridList.Where(_ => _.Position.y >= m_CellSize * 2 && _.Position.y < GetTopLeftGridPosition().y && _.CurrentUnitObject == null).Select(x => x).OrderBy(grid => Guid.NewGuid()).FirstOrDefault().Position;
+
+		public Vector2 RandomGridBottomPosition() => _GridList.Where(_ => _.Position.y == 0 && _.CurrentUnitObject == null).Select(x => x).OrderBy(grid => Guid.NewGuid()).FirstOrDefault().Position;
 
 		public Vector2 GetTopLeftGridPosition()
 		{

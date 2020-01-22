@@ -15,6 +15,8 @@ namespace CentipedeGame.GameObjects
 		protected override void Start()
 		{
 			base.Start();
+
+			m_Speed = GameManager.Instance.CentipedeSpeed;
 			_LimitPositionX = GridManager.Instance.GetTopRightGridPosition().x;
 			_SpriteRenderer = GetComponent<SpriteRenderer>();
 		}
@@ -35,12 +37,17 @@ namespace CentipedeGame.GameObjects
 		{
 			if (InvalidNextPosition(_position))
 			{
-				ToggleUpDown();
+				CurrentGrid.SetCurrentUnitObject(this);
+
+				if (_GoUp) GoUp();
+				else GoDown();
+
 				ToggleDirection();
 
 				return transform.position;
 			}
 
+			CurrentGrid.SetCurrentUnitObject(null);
 			return _position;
 		}
 
@@ -51,19 +58,11 @@ namespace CentipedeGame.GameObjects
 
 		protected override bool InvalidNextPosition(Vector2 _nextPosition)
 		{
-			return CheckReachedLimit(_nextPosition) || _nextPosition.y > GameManager.ScreenBounds.y - Height
-					|| _nextPosition.y < -(GameManager.ScreenBounds.y + Height)
-					|| (_nextPosition.HasObject() && _nextPosition.GetCurrentUnitObject().tag != tag);
-		}
+			if ((GameManager.ScreenBounds.y - transform.position.y >= GameManager.ScreenBounds.y && !_GoUp)
+				|| (GameManager.ScreenBounds.y - transform.position.y <= GridManager.Instance.CellSize && _GoUp))
+				ToggleUpDown();
 
-		public override void OnCollisionCondition(UnitObject _anotherObject)
-		{
-			if (_anotherObject.tag == "Bullet")
-			{
-				GameManager.Instance.UpdateCentipede(_Order);
-				GameManager.Instance.UpdateScore();
-				Destroy(gameObject);
-			}
+			return CheckReachedLimit(_nextPosition) || (_nextPosition.HasObject() && _nextPosition.GetCurrentUnitObject().tag != tag);
 		}
 
 		public void ToggleDirection()
@@ -72,10 +71,15 @@ namespace CentipedeGame.GameObjects
 			_SpriteRenderer.flipX = _TurnLeft;
 		}
 
-		private void ToggleUpDown()
+		private void ToggleUpDown() => _GoUp = !_GoUp;
+
+		private void OnTriggerEnter2D(Collider2D _other)
 		{
-			if (!_GoUp) GoDown();
-			else GoUp();
+			if (_other.tag == GameManager.BULLET)
+			{
+				GameManager.Instance.UpdateCentipede(this, _Order);
+				Destroy(gameObject);
+			}
 		}
 	}
 }
