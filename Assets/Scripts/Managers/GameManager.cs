@@ -76,7 +76,14 @@ namespace CentipedeGame.Managers
 
 		private void Update()
 		{
-			if (Input.GetKeyDown(KeyCode.Space) && _IsGameOver) SceneManager.LoadScene(0);
+			if (Input.GetKeyDown(KeyCode.Space) && _IsGameOver) RestartGame();
+		}
+
+		private void RestartGame()
+		{
+			_CurrentPlayerLife = m_PlayerLife;
+			_Score = 0;
+			ResetGame();
 		}
 
 		private void UpdateScore() => UpdateScore(m_CentipedeScore);
@@ -102,11 +109,12 @@ namespace CentipedeGame.Managers
 		{
 			DecreasePlayerLife();
 			if (_CurrentPlayerLife > 0)
-				RestartGame();
+				ResetGame();
 			else
 				DisplayGameOver(true);
 		}
-		private void RestartGame()
+
+		private void ResetGame()
 		{
 			foreach (var go in FindObjectsOfType<UnitObject>())
 			{
