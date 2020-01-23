@@ -76,7 +76,12 @@ namespace CentipedeGame.Managers
 
 		private void Update()
 		{
-			if (Input.GetKeyDown(KeyCode.Space) && _IsGameOver) SceneManager.LoadScene(0);
+			if (Input.GetKeyDown(KeyCode.Space) && _IsGameOver)
+			{
+				_CurrentPlayerLife = m_PlayerLife;
+				_Score = 0;
+				RestartGame();
+			}
 		}
 
 		private void UpdateScore() => UpdateScore(m_CentipedeScore);

@@ -28,10 +28,20 @@ namespace CentipedeGame.GameObjects
 			return (GameManager.ScreenBounds.y - transform.position.y) <= GridManager.Instance.CellSize;
 		}
 
-		private void OnTriggerEnter2D(Collider2D _other)
+		protected override bool CheckCollisionCondition()
 		{
+			return CurrentGrid.HasObject && CurrentGrid.CurrentUnitObject.tag != tag && CurrentGrid.CurrentUnitObject.tag != GameManager.PLAYER;
+		}
+
+		public override void OnCollisionCondition(UnitObject _other)
+		{
+			base.OnCollisionCondition(_other);
+
 			if (_other.tag == GameManager.MUSHROOM || _other.tag == GameManager.CENTIPEDE)
+			{
+				_other.OnCollisionCondition(this);
 				Destroy(gameObject);
+			}
 		}
 	}
 }

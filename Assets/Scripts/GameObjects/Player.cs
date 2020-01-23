@@ -74,7 +74,7 @@ namespace CentipedeGame.GameObjects
 					|| _nextPosition.HasObject();
 		}
 
-		private void OnTriggerEnter2D(Collider2D _other)
+		public override void OnCollisionCondition(UnitObject _other)
 		{
 			if (_other.tag == GameManager.CENTIPEDE)
 			{

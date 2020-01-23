@@ -44,6 +44,11 @@ namespace CentipedeGame.GameObjects
 			}
 		}
 
+		public virtual void OnCollisionCondition(UnitObject _other)
+		{
+			Debug.Log(_other.gameObject.tag);
+		}
+
 		protected virtual void OnDestroy()
 		{
 			if (CurrentGrid.CurrentUnitObject == this) CurrentGrid.SetCurrentUnitObject(null);

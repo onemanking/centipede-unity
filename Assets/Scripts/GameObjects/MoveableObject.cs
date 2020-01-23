@@ -47,6 +47,11 @@ namespace CentipedeGame.GameObjects
 			else if (_Direction.y == -1)
 				transform.position = LimitMovePosition(GridManager.Instance.GetDownPosition(transform.position));
 
+			if (CheckCollisionCondition())
+			{
+				OnCollisionCondition(CurrentGrid.CurrentUnitObject);
+			}
+
 			_Direction = Vector2.zero;
 		}
 
@@ -68,6 +73,11 @@ namespace CentipedeGame.GameObjects
 		{
 			return _nextPosition.x > GameManager.ScreenBounds.x - Width || _nextPosition.x < -(GameManager.ScreenBounds.x + Width)
 					|| _nextPosition.y > GameManager.ScreenBounds.y - Height || _nextPosition.y < -(GameManager.ScreenBounds.y + Height);
+		}
+
+		protected virtual bool CheckCollisionCondition()
+		{
+			return CurrentGrid.HasObject && CurrentGrid.CurrentUnitObject.tag != tag;
 		}
 
 		protected virtual void GoLeft() => _Direction = new Vector2(-1, _Direction.y);

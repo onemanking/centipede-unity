@@ -12,7 +12,7 @@ namespace CentipedeGame.GameObjects
 			m_Hp = GameManager.Instance.MushroomHp;
 		}
 
-		private void OnTriggerEnter2D(Collider2D _other)
+		public override void OnCollisionCondition(UnitObject _other)
 		{
 			if (_other.tag == GameManager.BULLET)
 				if (--m_Hp <= 0) Destroy(gameObject);

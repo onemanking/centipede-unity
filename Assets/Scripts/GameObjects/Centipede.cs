@@ -25,6 +25,7 @@ namespace CentipedeGame.GameObjects
 		{
 			base.Update();
 
+			CurrentGrid.SetCurrentUnitObject(this);
 			if (!_TurnLeft)
 				GoRight();
 			else
@@ -37,8 +38,6 @@ namespace CentipedeGame.GameObjects
 		{
 			if (InvalidNextPosition(_position))
 			{
-				CurrentGrid.SetCurrentUnitObject(this);
-
 				if (_GoUp) GoUp();
 				else GoDown();
 
@@ -73,7 +72,7 @@ namespace CentipedeGame.GameObjects
 
 		private void ToggleUpDown() => _GoUp = !_GoUp;
 
-		private void OnTriggerEnter2D(Collider2D _other)
+		public override void OnCollisionCondition(UnitObject _other)
 		{
 			if (_other.tag == GameManager.BULLET)
 			{
