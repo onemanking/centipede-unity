@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using CentipedeGame.Managers;
 using UnityEngine;
 
@@ -6,6 +7,9 @@ namespace CentipedeGame.GameObjects
 {
 	public class Centipede : MoveableObject
 	{
+		public bool TurnLeft => _TurnLeft;
+		public bool IsGoUp => _GoUp;
+
 		private int _Order;
 		private bool _TurnLeft;
 		private bool _GoUp;
@@ -21,17 +25,23 @@ namespace CentipedeGame.GameObjects
 			_SpriteRenderer = GetComponent<SpriteRenderer>();
 		}
 
+		private Centipede _FrontCentipede;
+		private Centipede _TailCentipede;
+
 		protected override void Update()
 		{
 			base.Update();
+
+			if (_FrontCentipede)
+			{
+				if (_FrontCentipede.TurnLeft != _TurnLeft && _FrontCentipede.transform.position.y == transform.position.y) ToggleDirection();
+			}
 
 			if (!_TurnLeft)
 				GoRight();
 			else
 				GoLeft();
 		}
-
-		public void SetOrder(int _order) => _Order = _order;
 
 		protected override Vector2 LimitMovePosition(Vector2 _position)
 		{
@@ -77,8 +87,46 @@ namespace CentipedeGame.GameObjects
 		{
 			if (_other.tag == GameManager.BULLET)
 			{
-				GameManager.Instance.UpdateCentipede(this, _Order);
+				GameManager.Instance.UpdateCentipede(this);
 				Destroy(gameObject);
+			}
+		}
+
+		protected void SetDirection(bool _turnLeft)
+		{
+			_TurnLeft = _turnLeft;
+		}
+
+		public void SetNeighbor(Centipede _front, Centipede _tail)
+		{
+			_FrontCentipede = _front;
+			_TailCentipede = _tail;
+		}
+
+		protected void RemoveFront()
+		{
+			_FrontCentipede = null;
+		}
+
+		protected void RemoveTail()
+		{
+			_TailCentipede = null;
+		}
+
+		protected override void OnDestroy()
+		{
+			base.OnDestroy();
+
+			if (_FrontCentipede)
+			{
+				_FrontCentipede.SetDirection(_TurnLeft);
+				_FrontCentipede.RemoveTail();
+			}
+
+			if (_TailCentipede)
+			{
+				_TailCentipede.SetDirection(!_TurnLeft);
+				_TailCentipede.RemoveFront();
 			}
 		}
 	}

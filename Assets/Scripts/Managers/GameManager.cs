@@ -140,12 +140,19 @@ namespace CentipedeGame.Managers
 		{
 			_CentipedeList = new List<Centipede>();
 			var pos = Vector2.zero;
-			for (int i = 0; i < CentipedeLength; i++)
+			for (int i = CentipedeLength; i > 0; i--)
 			{
 				pos = new Vector2(i, GridManager.Instance.GetTopLeftGridPosition().y);
 				var centipede = SpawnUnitObjectToGrid(m_CentipedePrefab, pos) as Centipede;
-				centipede.SetOrder(i);
 				_CentipedeList.Add(centipede);
+			}
+
+			for (int i = 0; i < _CentipedeList.Count; i++)
+			{
+				var centipede = _CentipedeList[i];
+				if (i == 0) { centipede.SetNeighbor(null, _CentipedeList[i + 1]); } // HEAD
+				else if (i == _CentipedeList.Count - 1) centipede.SetNeighbor(_CentipedeList[i - 1], null); // TAIL
+				else centipede.SetNeighbor(_CentipedeList[i - 1], _CentipedeList[i + 1]);
 			}
 		}
 
@@ -165,7 +172,7 @@ namespace CentipedeGame.Managers
 			return unitObject;
 		}
 
-		public void UpdateCentipede(Centipede _centipede, int _order)
+		public void UpdateCentipede(Centipede _centipede)
 		{
 			UpdateScore();
 			_CentipedeList.Remove(_centipede);
@@ -175,12 +182,6 @@ namespace CentipedeGame.Managers
 				DisplayGameOver(true);
 				return;
 			}
-
-			for (int i = 0; i < _CentipedeList.Count; i++)
-			{
-				if (i < _order && _CentipedeList[i]) _CentipedeList[i].ToggleDirection();
-			}
-
 		}
 	}
 }
