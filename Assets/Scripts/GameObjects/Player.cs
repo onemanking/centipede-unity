@@ -15,7 +15,8 @@ namespace CentipedeGame.GameObjects
 		{
 			base.Start();
 
-			m_FireRate = m_FireRate <= 0 ? 1 : m_FireRate;
+			m_Speed = GameManager.Instance.PlayerSpeed;
+			m_FireRate = GameManager.Instance.PlayerFireRate;
 		}
 
 		protected override void Update()
@@ -55,7 +56,12 @@ namespace CentipedeGame.GameObjects
 		protected override Vector2 LimitMovePosition(Vector2 _position)
 		{
 			if (InvalidNextPosition(_position))
+			{
+				CurrentGrid.SetCurrentUnitObject(this);
 				return transform.position;
+			}
+
+			CurrentGrid.SetCurrentUnitObject(null);
 
 			return new Vector2(Mathf.Clamp(_position.x, -(GameManager.ScreenBounds.x + Width), GameManager.ScreenBounds.x - Width),
 								Mathf.Clamp(_position.y, -(GameManager.ScreenBounds.y + Height), GameManager.LimitScreenHeight));
@@ -66,6 +72,14 @@ namespace CentipedeGame.GameObjects
 			return _nextPosition.x > GameManager.ScreenBounds.x - Width || _nextPosition.x < -(GameManager.ScreenBounds.x + Width)
 					|| _nextPosition.y > GameManager.LimitScreenHeight || _nextPosition.y < -(GameManager.ScreenBounds.y + Height)
 					|| _nextPosition.HasObject();
+		}
+
+		private void OnTriggerEnter2D(Collider2D _other)
+		{
+			if (_other.tag == GameManager.CENTIPEDE)
+			{
+				GameManager.Instance.CheckGameOver();
+			}
 		}
 	}
 }
